@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
-import { Text } from '@/components/ui/text';
+import { Button } from '@/common/components/ui/button';
+import { Icon } from '@/common/components/ui/icon';
+import { Text } from '@/common/components/ui/text';
 import { Link, Stack } from 'expo-router';
 import { MoonStarIcon, StarIcon, SunIcon } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
@@ -42,7 +42,7 @@ export default function Screen() {
         <View className="flex-row gap-2">
           <Link href="https://reactnativereusables.com" asChild>
             <Button>
-              <Text>Browse the Docs</Text>
+              <Text className="text-muted-foreground">Browse the Docs</Text>
             </Button>
           </Link>
           <Link href="https://github.com/founded-labs/react-native-reusables" asChild>
@@ -52,6 +52,10 @@ export default function Screen() {
             </Button>
           </Link>
         </View>
+
+        <Link className="text-foreground" href="/sign-in">
+          Ir pro login
+        </Link>
       </View>
     </>
   );
@@ -70,8 +74,12 @@ function ThemeToggle() {
       onPressIn={toggleColorScheme}
       size="icon"
       variant="ghost"
-      className="ios:size-9 rounded-full web:mx-4">
-      <Icon as={THEME_ICONS[colorScheme ?? 'light']} className="size-5" />
+      className="ios:size-9 rounded-full bg-muted/20 p-2 web:mx-4">
+      <Icon
+        color={colorScheme === 'dark' ? 'white' : 'black'}
+        as={THEME_ICONS[colorScheme ?? 'light']}
+        className="size-5"
+      />
     </Button>
   );
 }
