@@ -15,6 +15,7 @@ const LOGO = {
 const SCREEN_OPTIONS = {
   title: 'React Native Reusables',
   headerTransparent: true,
+  headerShown: true,
   headerRight: () => <ThemeToggle />,
 };
 
@@ -29,6 +30,7 @@ export default function Screen() {
   return (
     <>
       <Stack.Screen options={SCREEN_OPTIONS} />
+
       <View className="flex-1 items-center justify-center gap-8 p-4">
         <Image source={LOGO[colorScheme ?? 'light']} style={IMAGE_STYLE} resizeMode="contain" />
         <View className="gap-2 p-4">
@@ -42,7 +44,7 @@ export default function Screen() {
         <View className="flex-row gap-2">
           <Link href="https://reactnativereusables.com" asChild>
             <Button>
-              <Text className="text-muted-foreground">Browse the Docs</Text>
+              <Text>Browse the Docs</Text>
             </Button>
           </Link>
           <Link href="https://github.com/founded-labs/react-native-reusables" asChild>
@@ -55,6 +57,10 @@ export default function Screen() {
 
         <Link className="text-foreground" href="/sign-in">
           Ir pro login
+        </Link>
+
+        <Link className="text-foreground" href="/my-profile">
+          Meu perfil
         </Link>
       </View>
     </>

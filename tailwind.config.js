@@ -12,6 +12,12 @@ module.exports = {
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
+      fontFamily: {
+        sans: 'SpaceGrotesk_400Regular', // corpo de texto
+        sansBold: 'SpaceGrotesk_700Bold', // bold
+        display: ['Poppins', 'System'],
+      },
+
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
