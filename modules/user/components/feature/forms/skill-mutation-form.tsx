@@ -7,19 +7,29 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { Button } from '@/common/components/ui/button';
 import React from 'react';
-
-export const SkillSchema = z.object({
-  name: z.string().min(1, 'O nome da skill é obrigatório'),
-  proficiencyLevel: z.string().optional(),
-  yearsOfExperience: z.string().regex(/^\d*$/, 'Informe apenas números').optional(),
-});
-
-export type SkillFormValues = z.infer<typeof SkillSchema>;
+import { useGetSkills } from '@/modules/skills/hooks/api/use-skills-api';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/common/components/ui/select';
+import { CreateSkillForm } from '@/modules/skills/types/skills-form';
+import { CreateSkillSchema } from '@/modules/skills/schemas/create-skill-schema';
+import { ApiError } from '@/api';
+import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
+import {
+  proficiencyLevelOptions,
+  YearsOfExperienceOptions,
+} from '@/common/form-options/form-options';
+import { CreateSkillDto } from '@/modules/skills/types/skills-api';
 
 interface SkillMutationFormProps {
-  defaultValues?: Partial<SkillFormValues>;
+  defaultValues?: Partial<CreateSkillForm>;
   isLoading?: boolean;
-  onSubmit: (values: SkillFormValues) => void;
+  onSubmit: (values: CreateSkillDto) => void;
+  apiError?: ApiError;
 }
 
 // --- UTILITÁRIO ---
@@ -40,45 +50,62 @@ function useSyncedRef<T>() {
 }
 
 // --- FORMULÁRIO ---
-export function SkillMutationForm({ defaultValues, isLoading, onSubmit }: SkillMutationFormProps) {
-  const form = useForm<SkillFormValues>({
+export function SkillMutationForm({
+  defaultValues,
+  isLoading,
+  onSubmit,
+  apiError,
+}: SkillMutationFormProps) {
+  const form = useForm<CreateSkillForm>({
     mode: 'onChange',
-    resolver: zodResolver(SkillSchema),
+    resolver: zodResolver(CreateSkillSchema),
     defaultValues: {
-      name: '',
-      proficiencyLevel: '',
-      yearsOfExperience: '',
+      skill: undefined,
+      proficiency_level: undefined,
+      years_experience: undefined,
       ...defaultValues,
     },
   });
 
-  const { refs, getRef } = useSyncedRef<TextInput>();
-
-  const handleSubmit = (values: SkillFormValues) => {
-    onSubmit(values);
-    form.reset();
+  const handleSubmit = (values: CreateSkillForm) => {
+    onSubmit({
+      skill_id: values.skill.value,
+      proficiency_level: values.proficiency_level.value,
+      years_experience: Number(values.years_experience.value),
+    });
   };
 
   const formHasErrors = !!Object.keys(form.formState.errors).length;
 
+  const { data: skills, isLoading: isLoadingSkills } = useGetSkills();
+
+  if (isLoadingSkills || !skills) {
+    return <Text>Carregando...</Text>;
+  }
+
   return (
     <View className="gap-4">
+      {/* <Text>{JSON.stringify(form.watch(), null, 2)}</Text> */}
+
       <Controller
         control={form.control}
-        name="name"
+        name="skill"
         render={({ field, fieldState }) => (
           <View className="gap-1.5">
-            <Label>Nome da skill</Label>
-            <Input
-              placeholder="Ex: Mixagem"
-              onChangeText={field.onChange}
-              editable={!isLoading}
-              returnKeyType="next"
-              onSubmitEditing={() => refs.current['proficiencyLevel']?.focus()}
-              className={fieldState.error ? 'border-destructive' : ''}
-              {...field}
-              ref={getRef('name', field.ref)}
-            />
+            <Label>Habilidade</Label>
+
+            <Select value={field.value} onValueChange={field.onChange} disabled={isLoading}>
+              <SelectTrigger className={`w-full ${fieldState.error ? 'border-destructive' : ''}`}>
+                <SelectValue placeholder="Selecione a habilidade" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {skills.map((option) => (
+                  <SelectItem key={option.id} label={option.slug} value={option.id} />
+                ))}
+              </SelectContent>
+            </Select>
+
             {fieldState.error && (
               <Text className="text-sm text-destructive">{fieldState.error.message}</Text>
             )}
@@ -88,20 +115,23 @@ export function SkillMutationForm({ defaultValues, isLoading, onSubmit }: SkillM
 
       <Controller
         control={form.control}
-        name="proficiencyLevel"
+        name="proficiency_level"
         render={({ field, fieldState }) => (
           <View className="gap-1.5">
             <Label>Proficiência</Label>
-            <Input
-              placeholder="Ex: Avançado"
-              onChangeText={field.onChange}
-              editable={!isLoading}
-              returnKeyType="next"
-              onSubmitEditing={() => refs.current['yearsOfExperience']?.focus()}
-              className={fieldState.error ? 'border-destructive' : ''}
-              {...field}
-              ref={getRef('proficiencyLevel', field.ref)}
-            />
+
+            <Select value={field.value} onValueChange={field.onChange} disabled={isLoading}>
+              <SelectTrigger className={`w-full ${fieldState.error ? 'border-destructive' : ''}`}>
+                <SelectValue placeholder="Selecione o nível" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {proficiencyLevelOptions.map((option) => (
+                  <SelectItem key={option.value} label={option.label} value={option.value} />
+                ))}
+              </SelectContent>
+            </Select>
+
             {fieldState.error && (
               <Text className="text-sm text-destructive">{fieldState.error.message}</Text>
             )}
@@ -111,21 +141,23 @@ export function SkillMutationForm({ defaultValues, isLoading, onSubmit }: SkillM
 
       <Controller
         control={form.control}
-        name="yearsOfExperience"
+        name="years_experience"
         render={({ field, fieldState }) => (
           <View className="gap-1.5">
             <Label>Anos de experiência</Label>
-            <Input
-              placeholder="Ex: 3"
-              keyboardType="numeric"
-              onChangeText={field.onChange}
-              editable={!isLoading}
-              returnKeyType="done"
-              onSubmitEditing={form.handleSubmit(handleSubmit)}
-              className={fieldState.error ? 'border-destructive' : ''}
-              {...field}
-              ref={getRef('yearsOfExperience', field.ref)}
-            />
+
+            <Select value={field.value} onValueChange={field.onChange} disabled={isLoading}>
+              <SelectTrigger className={`w-full ${fieldState.error ? 'border-destructive' : ''}`}>
+                <SelectValue placeholder="Selecione o tempo" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {YearsOfExperienceOptions.map((option) => (
+                  <SelectItem key={option.value} label={option.label} value={option.value} />
+                ))}
+              </SelectContent>
+            </Select>
+
             {fieldState.error && (
               <Text className="text-sm text-destructive">{fieldState.error.message}</Text>
             )}
@@ -133,9 +165,11 @@ export function SkillMutationForm({ defaultValues, isLoading, onSubmit }: SkillM
         )}
       />
 
+      {apiError && <ApiErrorMessages messages={apiError.messages} />}
+
       <Button
         className="mt-4 w-full"
-        disabled={!form.formState.isValid || isLoading}
+        disabled={isLoading}
         onPress={form.handleSubmit(handleSubmit)}>
         <Text>{isLoading ? 'Salvando...' : 'Salvar'}</Text>
       </Button>

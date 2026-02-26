@@ -5,6 +5,8 @@ import { Text } from '@/common/components/ui/text';
 import { Textarea } from '@/common/components/ui/textarea';
 import { View } from 'react-native';
 import z from 'zod';
+import { ApiError } from '@/api';
+import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 
 const BioSchema = z.object({
   bio: z.string().min(5, 'A bio deve ter pelo menos 5 caracteres'),
@@ -14,10 +16,12 @@ export function BioForm({
   currentBio,
   onSubmit,
   isLoading,
+  apiError,
 }: {
   currentBio: string;
   onSubmit: (bio: string) => void;
   isLoading?: boolean;
+  apiError?: ApiError | null;
 }) {
   const {
     control,
@@ -50,6 +54,8 @@ export function BioForm({
           </View>
         )}
       />
+
+      {apiError && <ApiErrorMessages messages={apiError.messages} />}
 
       <Button onPress={handleSubmit(({ bio }) => onSubmit(bio))} disabled={isLoading || !isValid}>
         <Text>{isLoading ? 'Salvando...' : 'Salvar'}</Text>

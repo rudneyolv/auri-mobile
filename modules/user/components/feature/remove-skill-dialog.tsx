@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '@/common/components/ui/button';
 import {
   Dialog,
@@ -10,19 +11,30 @@ import {
 } from '@/common/components/ui/dialog';
 import { Icon } from '@/common/components/ui/icon';
 import { Text } from '@/common/components/ui/text';
+import { useRemoveSkill } from '@/modules/skills/hooks/api/use-skills-api';
 import { X } from 'lucide-react-native';
 import { View } from 'react-native';
 
 interface RemoveSkillProps {
   id: string;
   name?: string;
-  onRemove: (id: string) => void;
-  isLoading?: boolean;
 }
 
-export function RemoveSkill({ id, name, onRemove, isLoading }: RemoveSkillProps) {
+export function RemoveSkill({ id, name }: RemoveSkillProps) {
+  const [open, setOpen] = React.useState(false);
+
+  const { mutate: removeSkill, isPending } = useRemoveSkill();
+
+  const handleRemove = () => {
+    removeSkill(id, {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    });
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" className="size-7">
           <Icon as={X} className="size-4 text-destructive" />
@@ -43,7 +55,7 @@ export function RemoveSkill({ id, name, onRemove, isLoading }: RemoveSkillProps)
 
         <DialogFooter className="mt-4 flex-row gap-2">
           <DialogClose asChild>
-            <Button className="flex-1" disabled={isLoading} variant="secondary">
+            <Button className="flex-1" disabled={isPending} variant="secondary">
               <Text>Não</Text>
             </Button>
           </DialogClose>
@@ -51,9 +63,9 @@ export function RemoveSkill({ id, name, onRemove, isLoading }: RemoveSkillProps)
           <Button
             variant="destructive"
             className="flex-1"
-            disabled={isLoading}
-            onPress={() => onRemove(id)}>
-            <Text>Sim</Text>
+            disabled={isPending}
+            onPress={handleRemove}>
+            <Text>{isPending ? 'Removendo...' : 'Sim'}</Text>
           </Button>
         </DialogFooter>
       </DialogContent>

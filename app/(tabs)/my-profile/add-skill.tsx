@@ -7,17 +7,26 @@ import { X } from 'lucide-react-native';
 import { Icon } from '@/common/components/ui/icon';
 import { Card, CardContent } from '@/common/components/ui/card';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { useCreateSkill } from '@/modules/skills/hooks/api/use-skills-api';
+import { useRouter } from 'expo-router';
 
 export default function AddSkill() {
+  const { mutate: createSkill } = useCreateSkill();
+  const router = useRouter();
+
   return (
     <KeyboardAwareScrollView bottomOffset={10}>
       <View className="h-screen w-screen items-center justify-center p-6">
         <Card className="w-full max-w-md">
           <CardContent>
             <SkillMutationForm
-              onSubmit={(values) => {
-                console.log('submit', values);
-              }}
+              onSubmit={(values) =>
+                createSkill(values, {
+                  onSuccess: () => {
+                    router.push('/my-profile');
+                  },
+                })
+              }
               isLoading={false}
             />
           </CardContent>

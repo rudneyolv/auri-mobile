@@ -6,7 +6,9 @@ import { Card } from '@/common/components/ui/card';
 import { Icon } from '@/common/components/ui/icon';
 import { Text } from '@/common/components/ui/text';
 import { currentUser } from '@/data/mock';
-import { BioForm } from '@/modules/user/components/feature/forms/bio-form';
+import { BioForm } from '@/modules/profiles/components/feature/forms/bio-form';
+import { useGetMyprofile, useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';
+import { MySkillsList } from '@/modules/skills/components/feature/my-skills-list/my-skills-list';
 import { RemoveSkill } from '@/modules/user/components/feature/remove-skill-dialog';
 import { Stack, useRouter } from 'expo-router';
 import { Pencil, Sparkles, X } from 'lucide-react-native';
@@ -16,6 +18,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { data: myProfile, isLoading } = useGetMyprofile();
+  const { mutate: updateBio, isPending: isUpdatingBio, error: bioUpdateError } = useUpdateBio();
+
+  if (isLoading || !myProfile) return <Text>Carregando...</Text>;
 
   return (
     <SafeAreaView className="mx-auto flex h-full max-w-md flex-col">
@@ -26,67 +32,28 @@ export default function ProfileScreen() {
           <View className="flex flex-col items-center gap-2 text-center">
             <Avatar className="size-32" alt={currentUser.name}>
               <AvatarImage src={currentUser.photo} />
-              <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{myProfile.name.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
 
             <Text className="text-2xl font-semibold">
-              {currentUser.name}, {currentUser.age}
+              {myProfile.name}, {currentUser.age}
             </Text>
           </View>
 
-          <BioForm currentBio={currentUser.bio} onSubmit={() => {}} />
+          <BioForm
+            currentBio={myProfile.bio || ''}
+            onSubmit={(newBio) => updateBio(newBio)}
+            isLoading={isUpdatingBio}
+            apiError={bioUpdateError}
+          />
+
+          {/* <Text>{JSON.stringify({ skills: myProfile.skills }, null, 2)}</Text> */}
 
           {/* Skills Section */}
           <Card className="p-4">
             <Text className="mb-3 font-semibold">Habilidades</Text>
-            <View className="flex-col gap-2">
-              {currentUser.skills.map((skill, index) => (
-                <View key={index} className="relative rounded-xl border border-border bg-card p-3">
-                  {/* Header */}
-                  <View className="flex flex-row items-center justify-between">
-                    <Text className="text-sm font-medium">{skill.name}</Text>
 
-                    <View className="flex flex-row items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        className="size-7"
-                        onPress={() =>
-                          router.push({
-                            pathname: '/(tabs)/my-profile/update-skill/[id]',
-                            params: { id: skill.id },
-                          })
-                        }>
-                        <Icon as={Pencil} />
-                      </Button>
-
-                      <RemoveSkill
-                        id={skill.id}
-                        name={skill.name}
-                        onRemove={() => console.log('Skill removed')}
-                      />
-                    </View>
-                  </View>
-
-                  <View className="mt-2 flex flex-row gap-3">
-                    {skill.isPrimary && (
-                      <Badge variant="outline">
-                        <Text className="text-xs">Primária</Text>
-                      </Badge>
-                    )}
-
-                    <Badge variant="secondary">
-                      <Text className="text-xs">{skill.proficiencyLevel}</Text>
-                    </Badge>
-
-                    <Badge variant="secondary">
-                      <Text className="text-xs">{skill.yearsOfExperience} anos</Text>
-                    </Badge>
-                  </View>
-                </View>
-              ))}
-            </View>
-
-            {/* <AddSkill /> */}
+            <MySkillsList skills={myProfile.skills} />
 
             <Button
               variant="outline"

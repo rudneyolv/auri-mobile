@@ -19,7 +19,7 @@ import { View } from 'react-native';
 interface AddSkillFormValues {
   name: string;
   proficiencyLevel: string;
-  yearsOfExperience: string;
+  years_experience: string;
   isPrimary: boolean;
 }
 
@@ -34,7 +34,7 @@ export function ProfileTypeDialog() {
     defaultValues: {
       name: '',
       proficiencyLevel: '',
-      yearsOfExperience: '',
+      years_experience: '',
       isPrimary: false,
     },
   });
@@ -93,7 +93,7 @@ export function ProfileTypeDialog() {
           {/* Years */}
           <Controller
             control={control}
-            name="yearsOfExperience"
+            name="years_experience"
             render={({ field }) => (
               <View className="gap-1.5">
                 <Label>Anos de experiência</Label>
