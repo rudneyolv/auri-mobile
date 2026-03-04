@@ -11,7 +11,7 @@ export default function UpdateSkill() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
 
-  const { mutate: updateSkill, isPending } = useUpdateSkill();
+  const { mutate: updateSkill, isPending, error } = useUpdateSkill();
   const { data, isLoading } = useGetUserSkill(id!);
 
   if (!id) {
@@ -44,6 +44,7 @@ export default function UpdateSkill() {
               )
             }
             isLoading={isPending}
+            apiError={error ?? undefined}
             defaultValues={{
               proficiency_level: {
                 label: data.proficiency_level,

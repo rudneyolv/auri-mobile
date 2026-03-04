@@ -6,6 +6,7 @@ import {
   removeCategory,
   updateCategory,
 } from '@/modules/category/api/category-api';
+import { CreateCategoryDto, UpdateCategoryDto } from '@/modules/category/types/category-api';
 import { Category } from '@/modules/category/types/category-entity';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -26,7 +27,7 @@ export function useGetUserCategory(categoryId: string) {
 export function useCreateCategory() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Category, ApiError, CreateCategoryDto>({
     mutationFn: addCategory,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });
@@ -37,7 +38,7 @@ export function useCreateCategory() {
 export function useUpdateCategory() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Category, ApiError, { categoryId: string; dto: UpdateCategoryDto }>({
     mutationFn: updateCategory,
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });

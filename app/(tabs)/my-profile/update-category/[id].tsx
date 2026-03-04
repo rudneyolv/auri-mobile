@@ -14,7 +14,7 @@ export default function UpdateCategoryScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
 
-  const { mutate: updateCategory, isPending } = useUpdateCategory();
+  const { mutate: updateCategory, isPending, error } = useUpdateCategory();
   const { data, isLoading } = useGetUserCategory(id);
 
   if (!id) {
@@ -48,6 +48,7 @@ export default function UpdateCategoryScreen() {
               )
             }
             isLoading={isPending}
+            apiError={error ?? undefined}
             defaultValues={{
               proficiency_level: {
                 label: data.proficiency_level,

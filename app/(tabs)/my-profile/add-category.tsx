@@ -7,7 +7,7 @@ import { CategoryMutationForm } from '@/modules/category/components/feature/form
 import { useCreateCategory } from '@/modules/category/hooks/api/use-category-api';
 
 export default function AddCategoryScreen() {
-  const { mutate: createCategory } = useCreateCategory();
+  const { mutate: createCategory, isPending, error } = useCreateCategory();
   const router = useRouter();
 
   return (
@@ -23,7 +23,8 @@ export default function AddCategoryScreen() {
                   },
                 })
               }
-              isLoading={false}
+              isLoading={isPending}
+              apiError={error ?? undefined}
             />
           </CardContent>
         </Card>

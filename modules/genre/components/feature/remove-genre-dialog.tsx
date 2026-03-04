@@ -14,6 +14,7 @@ import { Text } from '@/common/components/ui/text';
 import { useRemoveGenre } from '@/modules/genre/hooks/api/use-genre-api';
 import { X } from 'lucide-react-native';
 import { View } from 'react-native';
+import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 
 interface RemoveGenreProps {
   id: string;
@@ -23,7 +24,7 @@ interface RemoveGenreProps {
 export function RemoveGenre({ id, name }: RemoveGenreProps) {
   const [open, setOpen] = React.useState(false);
 
-  const { mutate: removeGenre, isPending } = useRemoveGenre();
+  const { mutate: removeGenre, isPending, error } = useRemoveGenre();
 
   const handleRemove = () => {
     removeGenre(id, {
@@ -52,6 +53,8 @@ export function RemoveGenre({ id, name }: RemoveGenreProps) {
             <Text className="font-semibold">{name ?? 'este genero'}</Text>?
           </Text>
         </View>
+
+        <ApiErrorMessages messages={error?.messages} />
 
         <DialogFooter className="mt-4 flex-row gap-2">
           <DialogClose asChild>

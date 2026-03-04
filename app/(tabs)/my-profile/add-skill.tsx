@@ -7,7 +7,7 @@ import { useCreateSkill } from '@/modules/skill/hooks/api/use-skill-api';
 import { SkillMutationForm } from '@/modules/skill/components/feature/forms/skill-mutation-form';
 
 export default function AddSkillScreen() {
-  const { mutate: createSkill } = useCreateSkill();
+  const { mutate: createSkill, isPending, error } = useCreateSkill();
   const router = useRouter();
 
   return (
@@ -23,7 +23,8 @@ export default function AddSkillScreen() {
                   },
                 })
               }
-              isLoading={false}
+              isLoading={isPending}
+              apiError={error ?? undefined}
             />
           </CardContent>
         </Card>

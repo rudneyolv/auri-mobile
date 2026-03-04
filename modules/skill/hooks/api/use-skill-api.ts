@@ -5,6 +5,9 @@ import {
   removeSkill,
   updateSkill,
 } from '@/modules/skill/api/skill-api';
+import { ApiError } from '@/api';
+import { Skill } from '@/modules/skill/types/skill-entity';
+import { CreateSkillDto, UpdateSkillDto } from '@/modules/skill/types/skill-api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useGetSkills() {
@@ -24,7 +27,7 @@ export function useGetUserSkill(skillId: string) {
 export function useCreateSkill() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Skill, ApiError, CreateSkillDto>({
     mutationFn: createSkill,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });
@@ -35,7 +38,7 @@ export function useCreateSkill() {
 export function useUpdateSkill() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Skill, ApiError, { skillId: string; dto: UpdateSkillDto }>({
     mutationFn: updateSkill,
     onSuccess: (_data, variables) => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });
@@ -47,7 +50,7 @@ export function useUpdateSkill() {
 export function useRemoveSkill() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Skill, ApiError, string>({
     mutationFn: removeSkill,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });

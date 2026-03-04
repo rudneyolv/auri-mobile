@@ -25,7 +25,7 @@ export function useCreateGenre() {
 export function useRemoveGenre() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Genre, ApiError, string>({
     mutationFn: removeGenre,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });

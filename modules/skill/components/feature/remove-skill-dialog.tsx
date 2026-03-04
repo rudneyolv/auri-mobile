@@ -14,6 +14,7 @@ import { Text } from '@/common/components/ui/text';
 import { X } from 'lucide-react-native';
 import { View } from 'react-native';
 import { useRemoveSkill } from '@/modules/skill/hooks/api/use-skill-api';
+import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 
 interface RemoveSkillProps {
   id: string;
@@ -23,7 +24,7 @@ interface RemoveSkillProps {
 export function RemoveSkill({ id, name }: RemoveSkillProps) {
   const [open, setOpen] = React.useState(false);
 
-  const { mutate: removeSkill, isPending } = useRemoveSkill();
+  const { mutate: removeSkill, isPending, error } = useRemoveSkill();
 
   const handleRemove = () => {
     removeSkill(id, {
@@ -52,6 +53,8 @@ export function RemoveSkill({ id, name }: RemoveSkillProps) {
             <Text className="font-semibold">{name ?? 'esta habilidade'}</Text>?
           </Text>
         </View>
+
+        <ApiErrorMessages messages={error?.messages} />
 
         <DialogFooter className="mt-4 flex-row gap-2">
           <DialogClose asChild>
