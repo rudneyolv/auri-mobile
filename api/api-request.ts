@@ -1,6 +1,6 @@
 /** @format */
 
-import { ApiError, handleApiError, formatSupabaseError } from './utils/api-errors';
+import { handleApiError, formatSupabaseError, createApiError } from './utils/api-errors';
 import { ENV } from '@/config/env';
 import { supabase } from '@/common/libs/supabase/supabase';
 
@@ -36,7 +36,7 @@ export async function apiRequest<T>(data: ApiRequestOptions): Promise<T> {
       if (supabaseError) throw formatSupabaseError(supabaseError);
 
       if (!session) {
-        throw new ApiError({
+        throw createApiError({
           messages: ['Você precisa estar logado para acessar essa rota.'],
           error: 'not_logged_in',
         });

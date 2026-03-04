@@ -1,4 +1,3 @@
-import { AddGenre } from '@/common/components/elements/add-genre';
 import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar';
 import { Button } from '@/common/components/ui/button';
 import { Card } from '@/common/components/ui/card';
@@ -6,6 +5,7 @@ import { Icon } from '@/common/components/ui/icon';
 import { Text } from '@/common/components/ui/text';
 import { currentUser } from '@/data/mock';
 import { MyCategoriesList } from '@/modules/category/components/feature/my-categories-list/my-categories-list';
+import { AddGenre } from '@/modules/genre/components/feature/add-genre';
 import { MyGenresList } from '@/modules/genre/components/feature/my-genres-list/my-genres-list';
 import { BioForm } from '@/modules/profiles/components/feature/forms/bio-form';
 import { useGetMyprofile, useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';

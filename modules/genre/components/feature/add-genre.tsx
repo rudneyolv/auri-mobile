@@ -1,3 +1,4 @@
+import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 import { Button } from '@/common/components/ui/button';
 import { Checkbox } from '@/common/components/ui/checkbox';
 import { Label } from '@/common/components/ui/label';
@@ -10,34 +11,31 @@ import {
 } from '@/common/components/ui/select';
 import { Text } from '@/common/components/ui/text';
 import { useCreateGenre, useGetGenres } from '@/modules/genre/hooks/api/use-genre-api';
+import { AddGenreSchema } from '@/modules/genre/schemas/add-genre-schema';
+import { AddGenreForm } from '@/modules/genre/types/genre-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
-import z from 'zod';
 
-const AddGenreSchema = z.object({
-  genre: z.object({
-    label: z.string(),
-    value: z.string(),
-  }),
-  is_primary: z.boolean(),
-});
-
-type AddGenreForm = z.infer<typeof AddGenreSchema>;
+const defaultValues: DefaultValues<AddGenreForm> = {
+  genre: undefined,
+  is_primary: false,
+};
 
 export function AddGenre() {
   const { data: genres, isLoading: isLoadingGenres } = useGetGenres();
-  const { mutate: addGenre, isPending: isAddingGenre } = useCreateGenre();
+  const { mutate: addGenre, isPending: isAddingGenre, error: addGenreError } = useCreateGenre();
 
   const form = useForm<AddGenreForm>({
     mode: 'onChange',
     resolver: zodResolver(AddGenreSchema),
-    defaultValues: {
-      genre: undefined,
-      is_primary: false,
-    },
+    defaultValues: defaultValues,
   });
-  const isPrimaryChecked = form.watch('is_primary');
+
+  const isPrimaryChecked = useWatch({
+    control: form.control,
+    name: 'is_primary',
+  });
 
   const handleSubmit = (values: AddGenreForm) => {
     addGenre(
@@ -47,10 +45,7 @@ export function AddGenre() {
       },
       {
         onSuccess: () => {
-          form.reset({
-            genre: undefined,
-            is_primary: false,
-          });
+          form.reset(defaultValues);
         },
       }
     );
@@ -84,6 +79,8 @@ export function AddGenre() {
             {fieldState.error && (
               <Text className="text-sm text-destructive">{fieldState.error.message}</Text>
             )}
+
+            {addGenreError && <ApiErrorMessages messages={addGenreError.messages} />}
           </View>
         )}
       />

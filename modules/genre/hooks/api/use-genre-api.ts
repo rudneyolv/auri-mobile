@@ -1,4 +1,7 @@
+import { ApiError } from '@/api';
 import { addGenre, getGenres, removeGenre } from '@/modules/genre/api/genre-api';
+import { CreateGenreDto } from '@/modules/genre/types/genre-api';
+import { Genre } from '@/modules/genre/types/genre-entity';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useGetGenres() {
@@ -11,7 +14,7 @@ export function useGetGenres() {
 export function useCreateGenre() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Genre, ApiError, CreateGenreDto>({
     mutationFn: addGenre,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });

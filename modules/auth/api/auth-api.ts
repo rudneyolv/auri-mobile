@@ -1,4 +1,4 @@
-import { apiRequest, formatSupabaseError, handleApiError, isApiError } from '@/api';
+import { apiRequest, formatSupabaseError, handleApiError } from '@/api';
 import { supabase } from '@/common/libs/supabase/supabase';
 import { SignInFormValues, SignUpFormValues } from '@/modules/auth/schemas/auth-schema';
 
@@ -16,6 +16,7 @@ export async function signIn(data: SignInFormValues) {
   } catch (error) {
     handleApiError({
       error,
+      fallbackMessage: 'Erro desconhecido ao tentar fazer login. Tente novamente mais tarde.',
     });
   }
 }

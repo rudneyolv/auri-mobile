@@ -1,61 +1,50 @@
 /** @format */
 
 import { AuthError } from '@supabase/supabase-js';
+import { ApiError } from '../types/api-error-types';
+import { ApiErrorSchema } from '../schemas/api-error-schema';
 
-class ApiError extends Error {
+interface HandleApiErrorProps {
+  error: unknown;
+  fallbackMessage: string;
+}
+
+const createApiError = (data: {
   messages: string[];
   error?: string;
   statusCode?: number;
+}): ApiError => {
+  const { messages, error = 'common.messages.error.unknown', statusCode } = data;
 
-  constructor(data: { messages: string[]; error?: string; statusCode?: number }) {
-    super(data.messages.join(' | ')); // mensagem principal para o stack trace
-    this.messages = data.messages;
-    this.error = data.error ?? 'common.messages.error.unknown';
-    this.statusCode = data.statusCode;
-    Object.setPrototypeOf(this, ApiError.prototype);
-  }
-}
+  return {
+    messages,
+    error,
+    statusCode,
+  };
+};
 
 const formatSupabaseError = (error: AuthError): ApiError => {
-  return new ApiError({
-    messages: [error.message ?? 'Erro desconhecido'],
+  return createApiError({
+    messages: [error.message ?? 'common.messages.error.unknown'],
     statusCode: error.status ?? 500,
     error: error.code ?? 'supabase_error',
   });
 };
 
-const handleApiError = ({
-  error,
-  fallbackMessage = 'Erro desconhecido na requisição',
-}: {
-  error: unknown;
-  fallbackMessage?: string;
-}): never => {
-  if (error instanceof ApiError) throw error;
-
-  // Se for um Error normal do JS
-  if (error instanceof Error) {
-    throw new ApiError({ messages: [error.message] });
-  }
-
-  // Se for um objeto com message do backend
-  if (typeof error === 'object' && error !== null) {
-    const errObj = error as { message?: string | string[]; error?: string; statusCode?: number };
-
-    // Se vier um array de mensagens ou string
-    const messages = Array.isArray(errObj.message)
-      ? errObj.message
-      : [errObj.message ?? fallbackMessage];
-
-    throw new ApiError({
-      messages,
-      error: errObj.error,
-      statusCode: errObj.statusCode,
-    });
-  }
-
-  // fallback genérico
-  throw new ApiError({ messages: [fallbackMessage] });
+const isApiError = (error: unknown): error is ApiError => {
+  return ApiErrorSchema.safeParse(error).success;
 };
 
-export { ApiError, formatSupabaseError, handleApiError };
+const handleApiError = ({ error, fallbackMessage }: HandleApiErrorProps): never => {
+  if (isApiError(error)) {
+    throw error;
+  }
+
+  if (error instanceof Error) {
+    throw createApiError({ messages: [error.message] });
+  }
+
+  throw createApiError({ messages: [fallbackMessage] });
+};
+
+export { createApiError, formatSupabaseError, handleApiError, isApiError };
