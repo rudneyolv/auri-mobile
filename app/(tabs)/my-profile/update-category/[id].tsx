@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SkillMutationForm } from '@/modules/user/components/feature/forms/skill-mutation-form';
 import { Text } from '@/common/components/ui/text';
 import { Card, CardContent } from '@/common/components/ui/card';
 import { useLocalSearchParams, useRouter } from 'expo-router';

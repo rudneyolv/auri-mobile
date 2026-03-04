@@ -4,7 +4,7 @@ import {
   getUserSkill,
   removeSkill,
   updateSkill,
-} from '@/modules/skills/api/skills-api';
+} from '@/modules/skill/api/skill-api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useGetSkills() {

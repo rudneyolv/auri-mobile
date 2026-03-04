@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import { SkillMutationForm } from '@/modules/user/components/feature/forms/skill-mutation-form';
 import { Text } from '@/common/components/ui/text';
 import { Card, CardContent } from '@/common/components/ui/card';
-import { useGetUserSkill, useUpdateSkill } from '@/modules/skills/hooks/api/use-skills-api';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { YearsOfExperience } from '@/common/types/common-enums';
+import { useGetUserSkill, useUpdateSkill } from '@/modules/skill/hooks/api/use-skill-api';
+import { SkillMutationForm } from '@/modules/skill/components/feature/forms/skill-mutation-form';
 
 export default function UpdateSkill() {
   const { id } = useLocalSearchParams<{ id: string }>();

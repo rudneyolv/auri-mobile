@@ -9,7 +9,7 @@ import { MyCategoriesList } from '@/modules/category/components/feature/my-categ
 import { MyGenresList } from '@/modules/genre/components/feature/my-genres-list/my-genres-list';
 import { BioForm } from '@/modules/profiles/components/feature/forms/bio-form';
 import { useGetMyprofile, useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';
-import { MySkillsList } from '@/modules/skills/components/feature/my-skills-list/my-skills-list';
+import { MySkillsList } from '@/modules/skill/components/feature/my-skills-list/my-skills-list';
 import { Stack, useRouter } from 'expo-router';
 import { Sparkles } from 'lucide-react-native';
 import { View } from 'react-native';

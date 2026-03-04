@@ -16,6 +16,7 @@ export interface Skill {
   id: string;
   category: string;
   name: string;
+  slug: string;
   proficiencyLevel?: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
   years_experience?: string;
   isPrimary?: boolean;

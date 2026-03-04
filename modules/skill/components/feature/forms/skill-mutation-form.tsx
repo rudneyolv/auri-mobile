@@ -1,13 +1,10 @@
-import { Input } from '@/common/components/ui/input';
 import { Label } from '@/common/components/ui/label';
 import { Text } from '@/common/components/ui/text';
 import { Controller, useForm } from 'react-hook-form';
-import { View, TextInput, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
 import { Button } from '@/common/components/ui/button';
 import React from 'react';
-import { useGetSkills } from '@/modules/skills/hooks/api/use-skills-api';
 import {
   Select,
   SelectContent,
@@ -15,15 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/common/components/ui/select';
-import { CreateSkillForm } from '@/modules/skills/types/skills-form';
-import { CreateSkillSchema } from '@/modules/skills/schemas/create-skill-schema';
 import { ApiError } from '@/api';
 import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 import {
   proficiencyLevelOptions,
   YearsOfExperienceOptions,
 } from '@/common/form-options/form-options';
-import { CreateSkillDto } from '@/modules/skills/types/skills-api';
+import { CreateSkillForm } from '@/modules/skill/types/skill-form';
+import { CreateSkillDto } from '@/modules/skill/types/skill-api';
+import { CreateSkillSchema } from '@/modules/skill/schemas/create-skill-schema';
+import { useGetSkills } from '@/modules/skill/hooks/api/use-skill-api';
 
 interface SkillMutationFormProps {
   defaultValues?: Partial<CreateSkillForm>;

@@ -1,8 +1,6 @@
 import { apiRequest } from '@/api';
-import { CreateSkillDto, UpdateSkillDto } from '@/modules/skills/types/skills-api';
-import { Skill, UserSkill } from '@/modules/skills/types/skills-entity';
-import { CreateSkillForm } from '@/modules/skills/types/skills-form';
-
+import { CreateSkillDto, UpdateSkillDto } from '@/modules/skill/types/skill-api';
+import { Skill, UserSkill } from '@/modules/skill/types/skill-entity';
 export async function getSkills() {
   return await apiRequest<Skill[]>({
     endpoint: 'skills',
@@ -38,8 +36,6 @@ export async function createSkill(dto: CreateSkillDto) {
 }
 
 export async function updateSkill({ skillId, dto }: { skillId: string; dto: UpdateSkillDto }) {
-  console.log(dto);
-
   return await apiRequest<Skill>({
     endpoint: `profiles/me/skills/${skillId}`,
     requiresAuth: true,

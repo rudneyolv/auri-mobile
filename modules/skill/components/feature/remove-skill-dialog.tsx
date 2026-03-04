@@ -11,9 +11,9 @@ import {
 } from '@/common/components/ui/dialog';
 import { Icon } from '@/common/components/ui/icon';
 import { Text } from '@/common/components/ui/text';
-import { useRemoveSkill } from '@/modules/skills/hooks/api/use-skills-api';
 import { X } from 'lucide-react-native';
 import { View } from 'react-native';
+import { useRemoveSkill } from '@/modules/skill/hooks/api/use-skill-api';
 
 interface RemoveSkillProps {
   id: string;
