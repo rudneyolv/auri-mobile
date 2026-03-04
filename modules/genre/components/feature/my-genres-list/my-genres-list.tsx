@@ -5,6 +5,12 @@ import { UserGenre } from '@/modules/genre/types/genre-entity';
 import { View } from 'react-native';
 
 export function MyGenresList({ genres }: { genres: UserGenre[] }) {
+  if (genres.length === 0) {
+    return (
+      <Text className="text-sm font-medium text-muted-foreground">Nenhum gênero cadastrado</Text>
+    );
+  }
+
   return (
     <View className="flex flex-col gap-2">
       {genres.map((data) => (

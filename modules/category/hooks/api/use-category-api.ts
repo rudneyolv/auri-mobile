@@ -1,3 +1,4 @@
+import { ApiError } from '@/api';
 import {
   addCategory,
   getCategories,
@@ -5,6 +6,7 @@ import {
   removeCategory,
   updateCategory,
 } from '@/modules/category/api/category-api';
+import { Category } from '@/modules/category/types/category-entity';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useGetCategories() {
@@ -47,7 +49,7 @@ export function useUpdateCategory() {
 export function useRemoveCategory() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useMutation<Category, ApiError, string>({
     mutationFn: removeCategory,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-profile'] });

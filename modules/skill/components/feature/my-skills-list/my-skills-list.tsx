@@ -11,6 +11,14 @@ import { View } from 'react-native';
 export function MySkillsList({ skills }: { skills: UserSkill[] }) {
   const router = useRouter();
 
+  if (skills.length === 0) {
+    return (
+      <Text className="text-sm font-medium text-muted-foreground">
+        Nenhuma habilidade cadastrada
+      </Text>
+    );
+  }
+
   return (
     <View className="flex-col gap-2">
       {skills.map((data) => (

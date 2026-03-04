@@ -14,6 +14,7 @@ import { Text } from '@/common/components/ui/text';
 import { X } from 'lucide-react-native';
 import { View } from 'react-native';
 import { useRemoveCategory } from '@/modules/category/hooks/api/use-category-api';
+import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 
 interface RemoveCategoryProps {
   id: string;
@@ -23,7 +24,7 @@ interface RemoveCategoryProps {
 export function RemoveCategory({ id, name }: RemoveCategoryProps) {
   const [open, setOpen] = React.useState(false);
 
-  const { mutate: removeCategory, isPending } = useRemoveCategory();
+  const { mutate: removeCategory, isPending, error } = useRemoveCategory();
 
   const handleRemove = () => {
     removeCategory(id, {
@@ -53,20 +54,24 @@ export function RemoveCategory({ id, name }: RemoveCategoryProps) {
           </Text>
         </View>
 
-        <DialogFooter className="mt-4 flex-row gap-2">
-          <DialogClose asChild>
-            <Button className="flex-1" disabled={isPending} variant="secondary">
-              <Text>Não</Text>
-            </Button>
-          </DialogClose>
+        {error && <ApiErrorMessages messages={error.messages} />}
 
-          <Button
-            variant="destructive"
-            className="flex-1"
-            disabled={isPending}
-            onPress={handleRemove}>
-            <Text>{isPending ? 'Removendo...' : 'Sim'}</Text>
-          </Button>
+        <DialogFooter>
+          <View className="flex-row gap-2">
+            <DialogClose asChild>
+              <Button className="flex-1" disabled={isPending} variant="secondary">
+                <Text>Não</Text>
+              </Button>
+            </DialogClose>
+
+            <Button
+              variant="destructive"
+              className="flex-1"
+              disabled={isPending}
+              onPress={handleRemove}>
+              <Text>{isPending ? 'Removendo...' : 'Sim'}</Text>
+            </Button>
+          </View>
         </DialogFooter>
       </DialogContent>
     </Dialog>

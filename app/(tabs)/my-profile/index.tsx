@@ -28,6 +28,7 @@ export default function ProfileScreen() {
 
       <KeyboardAwareScrollView>
         <View className="gap-6 p-6">
+          {/* Profile Header */}
           <View className="flex flex-col items-center gap-2 text-center">
             <Avatar className="size-32" alt={currentUser.name}>
               <AvatarImage src={currentUser.photo} />
@@ -39,6 +40,7 @@ export default function ProfileScreen() {
             </Text>
           </View>
 
+          {/* Bio  */}
           <UpdateBio currentBio={myProfile.bio} />
 
           {/* Categories Section */}
