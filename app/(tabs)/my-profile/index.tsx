@@ -7,7 +7,7 @@ import { currentUser } from '@/data/mock';
 import { MyCategoriesList } from '@/modules/category/components/feature/my-categories-list/my-categories-list';
 import { AddGenre } from '@/modules/genre/components/feature/add-genre';
 import { MyGenresList } from '@/modules/genre/components/feature/my-genres-list/my-genres-list';
-import { BioForm } from '@/modules/profiles/components/feature/forms/bio-form';
+import { UpdateBio } from '@/modules/profiles/components/feature/forms/update-bio';
 import { useGetMyprofile, useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';
 import { MySkillsList } from '@/modules/skill/components/feature/my-skills-list/my-skills-list';
 import { Stack, useRouter } from 'expo-router';
@@ -19,7 +19,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function ProfileScreen() {
   const router = useRouter();
   const { data: myProfile, isLoading } = useGetMyprofile();
-  const { mutate: updateBio, isPending: isUpdatingBio, error: bioUpdateError } = useUpdateBio();
 
   if (isLoading || !myProfile) return <Text>Carregando...</Text>;
 
@@ -40,12 +39,7 @@ export default function ProfileScreen() {
             </Text>
           </View>
 
-          <BioForm
-            currentBio={myProfile.bio || ''}
-            onSubmit={(newBio) => updateBio(newBio)}
-            isLoading={isUpdatingBio}
-            apiError={bioUpdateError}
-          />
+          <UpdateBio currentBio={myProfile.bio} />
 
           {/* Categories Section */}
           <Card className="p-4">

@@ -1,11 +1,11 @@
 import { UserCategory } from '@/modules/category/types/category-entity';
 import { UserGenre } from '@/modules/genre/types/genre-entity';
-import { UserSkill } from '@/modules/skills/types/skills-entity';
+import { UserSkill } from '@/modules/skill/types/skill-entity';
 
 export interface UserProfile {
   user_id: string;
   name: string;
-  bio: string | null;
+  bio?: string;
   profile_picture_url: string | null;
   accept_messages_from_non_matches: boolean;
   categories: UserCategory[];

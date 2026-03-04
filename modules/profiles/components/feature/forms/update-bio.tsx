@@ -4,32 +4,21 @@ import { Button } from '@/common/components/ui/button';
 import { Text } from '@/common/components/ui/text';
 import { Textarea } from '@/common/components/ui/textarea';
 import { View } from 'react-native';
-import z from 'zod';
-import { ApiError } from '@/api';
 import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
+import { useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';
+import { UpdateBioSchema } from '@/modules/profiles/schemas/update-bio';
+import { UpdateBioFormData } from '@/modules/profiles/types/profile-forms';
 
-const BioSchema = z.object({
-  bio: z.string().min(5, 'A bio deve ter pelo menos 5 caracteres'),
-});
+export function UpdateBio({ currentBio }: { currentBio?: string }) {
+  const { mutate: updateBio, isPending, error } = useUpdateBio();
 
-export function BioForm({
-  currentBio,
-  onSubmit,
-  isLoading,
-  apiError,
-}: {
-  currentBio: string;
-  onSubmit: (bio: string) => void;
-  isLoading?: boolean;
-  apiError?: ApiError | null;
-}) {
   const {
     control,
     handleSubmit,
     formState: { isValid },
-  } = useForm<{ bio: string }>({
-    defaultValues: { bio: currentBio },
-    resolver: zodResolver(BioSchema),
+  } = useForm<UpdateBioFormData>({
+    defaultValues: { bio: currentBio ?? undefined },
+    resolver: zodResolver(UpdateBioSchema),
     mode: 'onChange',
   });
 
@@ -43,7 +32,7 @@ export function BioForm({
         render={({ field, fieldState }) => (
           <View className="gap-1.5" data-invalid={fieldState.invalid}>
             <Textarea
-              editable={!isLoading}
+              editable={!isPending}
               placeholder="Insira aqui sua biografia, suas habilidades, experiências etc..."
               className="min-h-28"
               {...field}
@@ -55,10 +44,10 @@ export function BioForm({
         )}
       />
 
-      {apiError && <ApiErrorMessages messages={apiError.messages} />}
+      {error && <ApiErrorMessages messages={error.messages} />}
 
-      <Button onPress={handleSubmit(({ bio }) => onSubmit(bio))} disabled={isLoading || !isValid}>
-        <Text>{isLoading ? 'Salvando...' : 'Salvar'}</Text>
+      <Button onPress={handleSubmit(({ bio }) => updateBio(bio))} disabled={isPending || !isValid}>
+        <Text>{isPending ? 'Salvando...' : 'Salvar'}</Text>
       </Button>
     </View>
   );
