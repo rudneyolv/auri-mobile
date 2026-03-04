@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Button } from '@/common/components/ui/button';
-import { SkillMutationForm } from '@/modules/user/components/feature/forms/skill-mutation-form';
-import { Text } from '@/common/components/ui/text';
-import { X } from 'lucide-react-native';
-import { Icon } from '@/common/components/ui/icon';
 import { Card, CardContent } from '@/common/components/ui/card';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { useCreateSkill } from '@/modules/skills/hooks/api/use-skills-api';
 import { useRouter } from 'expo-router';
+import { CategoryMutationForm } from '@/modules/category/components/feature/forms/category-mutation-form';
+import { useCreateCategory } from '@/modules/category/hooks/api/use-category-api';
 
-export default function AddSkillScreen() {
-  const { mutate: createSkill } = useCreateSkill();
+export default function AddCategoryScreen() {
+  const { mutate: createCategory } = useCreateCategory();
   const router = useRouter();
 
   return (
@@ -19,9 +15,9 @@ export default function AddSkillScreen() {
       <View className="h-screen w-screen items-center justify-center p-6">
         <Card className="w-full max-w-md">
           <CardContent>
-            <SkillMutationForm
+            <CategoryMutationForm
               onSubmit={(values) =>
-                createSkill(values, {
+                createCategory(values, {
                   onSuccess: () => {
                     router.push('/my-profile');
                   },

@@ -38,6 +38,8 @@ export async function createSkill(dto: CreateSkillDto) {
 }
 
 export async function updateSkill({ skillId, dto }: { skillId: string; dto: UpdateSkillDto }) {
+  console.log(dto);
+
   return await apiRequest<Skill>({
     endpoint: `profiles/me/skills/${skillId}`,
     requiresAuth: true,

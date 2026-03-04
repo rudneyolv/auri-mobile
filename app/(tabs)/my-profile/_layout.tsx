@@ -38,6 +38,22 @@ export default function MyProfileLayout() {
           presentation: 'modal',
         }}
       />
+
+      <Stack.Screen
+        name="add-category"
+        options={{
+          title: 'Adicionar Categoria',
+          presentation: 'modal',
+        }}
+      />
+
+      <Stack.Screen
+        name="update-category/[id]"
+        options={{
+          title: 'Editar Categoria',
+          presentation: 'modal',
+        }}
+      />
     </Stack>
   );
 }

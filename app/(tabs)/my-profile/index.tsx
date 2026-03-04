@@ -1,17 +1,17 @@
 import { AddGenre } from '@/common/components/elements/add-genre';
 import { Avatar, AvatarFallback, AvatarImage } from '@/common/components/ui/avatar';
-import { Badge } from '@/common/components/ui/badge';
 import { Button } from '@/common/components/ui/button';
 import { Card } from '@/common/components/ui/card';
 import { Icon } from '@/common/components/ui/icon';
 import { Text } from '@/common/components/ui/text';
 import { currentUser } from '@/data/mock';
+import { MyCategoriesList } from '@/modules/category/components/feature/my-categories-list/my-categories-list';
+import { MyGenresList } from '@/modules/genre/components/feature/my-genres-list/my-genres-list';
 import { BioForm } from '@/modules/profiles/components/feature/forms/bio-form';
 import { useGetMyprofile, useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';
 import { MySkillsList } from '@/modules/skills/components/feature/my-skills-list/my-skills-list';
-import { RemoveSkill } from '@/modules/user/components/feature/remove-skill-dialog';
 import { Stack, useRouter } from 'expo-router';
-import { Pencil, Sparkles, X } from 'lucide-react-native';
+import { Sparkles } from 'lucide-react-native';
 import { View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -47,7 +47,19 @@ export default function ProfileScreen() {
             apiError={bioUpdateError}
           />
 
-          {/* <Text>{JSON.stringify({ skills: myProfile.skills }, null, 2)}</Text> */}
+          {/* Categories Section */}
+          <Card className="p-4">
+            <Text className="mb-3 font-semibold">O que eu faço</Text>
+
+            <MyCategoriesList categories={myProfile.categories} />
+
+            <Button
+              variant="outline"
+              className="h-12 w-full border-dashed"
+              onPress={() => router.push('/(tabs)/my-profile/add-category')}>
+              <Text className="text-primary">+ Adicionar nova categoria</Text>
+            </Button>
+          </Card>
 
           {/* Skills Section */}
           <Card className="p-4">
@@ -66,17 +78,7 @@ export default function ProfileScreen() {
           {/* Genres Section */}
           <Card className="p-4">
             <Text className="mb-3 font-semibold">Gêneros Musicais</Text>
-            <View className="flex flex-row flex-wrap gap-2">
-              {currentUser.genres.map((genre, index) => (
-                <Badge key={index} variant="secondary" className="text-sm">
-                  <Text>{genre}</Text>
-
-                  <Button variant="ghost" className="size-4">
-                    <Icon as={X} className="size-4 text-destructive" />
-                  </Button>
-                </Badge>
-              ))}
-            </View>
+            <MyGenresList genres={myProfile.genres} />
 
             <AddGenre />
           </Card>
