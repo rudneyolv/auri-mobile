@@ -44,7 +44,7 @@ export function UpdateBio({ currentBio }: { currentBio?: string }) {
         )}
       />
 
-      {error && <ApiErrorMessages messages={error.messages} />}
+      <ApiErrorMessages messages={error?.messages} />
 
       <Button onPress={handleSubmit(({ bio }) => updateBio(bio))} disabled={isPending || !isValid}>
         <Text>{isPending ? 'Salvando...' : 'Salvar'}</Text>

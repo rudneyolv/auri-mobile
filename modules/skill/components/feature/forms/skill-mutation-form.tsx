@@ -163,7 +163,7 @@ export function SkillMutationForm({
         )}
       />
 
-      {apiError && <ApiErrorMessages messages={apiError.messages} />}
+      <ApiErrorMessages messages={apiError?.messages} />
 
       <Button
         className="mt-4 w-full"

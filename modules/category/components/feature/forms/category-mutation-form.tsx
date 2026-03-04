@@ -199,7 +199,7 @@ export function CategoryMutationForm({
         )}
       />
 
-      {apiError && <ApiErrorMessages messages={apiError.messages} />}
+      <ApiErrorMessages messages={apiError?.messages} />
 
       <Button
         className="mt-4 w-full"

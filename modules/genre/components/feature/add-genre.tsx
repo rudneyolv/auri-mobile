@@ -63,7 +63,6 @@ export function AddGenre() {
         render={({ field, fieldState }) => (
           <View className="gap-2">
             <Label>Genero</Label>
-
             <Select value={field.value} onValueChange={field.onChange} disabled={isAddingGenre}>
               <SelectTrigger className={`w-full ${fieldState.error ? 'border-destructive' : ''}`}>
                 <SelectValue placeholder="Selecione o genero" />
@@ -75,12 +74,11 @@ export function AddGenre() {
                 ))}
               </SelectContent>
             </Select>
-
             {fieldState.error && (
               <Text className="text-sm text-destructive">{fieldState.error.message}</Text>
             )}
 
-            {addGenreError && <ApiErrorMessages messages={addGenreError.messages} />}
+            <ApiErrorMessages messages={addGenreError?.messages} />
           </View>
         )}
       />

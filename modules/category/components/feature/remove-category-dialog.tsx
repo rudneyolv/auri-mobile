@@ -54,7 +54,7 @@ export function RemoveCategory({ id, name }: RemoveCategoryProps) {
           </Text>
         </View>
 
-        {error && <ApiErrorMessages messages={error.messages} />}
+        <ApiErrorMessages messages={error?.messages} />
 
         <DialogFooter>
           <View className="flex-row gap-2">

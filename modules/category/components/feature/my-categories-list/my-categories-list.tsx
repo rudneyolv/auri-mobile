@@ -10,6 +10,7 @@ import { View } from 'react-native';
 
 export function MyCategoriesList({ categories }: { categories: UserCategory[] }) {
   const router = useRouter();
+  const haveOnlyOne = categories.length === 1;
 
   return (
     <View className="flex-col gap-2">
@@ -31,7 +32,7 @@ export function MyCategoriesList({ categories }: { categories: UserCategory[] })
                 <Icon as={Pencil} />
               </Button>
 
-              <RemoveCategory id={data.id} name={data.slug} />
+              {!haveOnlyOne && <RemoveCategory id={data.id} name={data.slug} />}
             </View>
           </View>
 
