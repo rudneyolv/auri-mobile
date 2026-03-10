@@ -48,6 +48,28 @@ export default function MyProfileLayout() {
       />
 
       <Stack.Screen
+        name="add-video"
+        options={{
+          title: 'Adicionar Video',
+          presentation: 'modal',
+        }}
+      />
+
+      <Stack.Screen
+        name="my-videos"
+        options={{
+          title: 'Meus Videos',
+        }}
+      />
+
+      <Stack.Screen
+        name="my-videos/[videoId]"
+        options={{
+          title: 'Video',
+        }}
+      />
+
+      <Stack.Screen
         name="update-category/[id]"
         options={{
           title: 'Editar Categoria',

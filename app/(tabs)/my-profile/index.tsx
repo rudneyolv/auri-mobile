@@ -10,6 +10,7 @@ import { MyGenresList } from '@/modules/genre/components/feature/my-genres-list/
 import { UpdateBio } from '@/modules/profiles/components/feature/forms/update-bio';
 import { useGetMyprofile, useUpdateBio } from '@/modules/profiles/hooks/api/use-profile-api';
 import { MySkillsList } from '@/modules/skill/components/feature/my-skills-list/my-skills-list';
+import { MyVideosGrid } from '@/modules/video/components/feature/my-videos-grid';
 import { Stack, useRouter } from 'expo-router';
 import { Sparkles } from 'lucide-react-native';
 import { View } from 'react-native';
@@ -79,6 +80,8 @@ export default function ProfileScreen() {
             <AddGenre />
           </Card>
 
+          <MyVideosGrid userId={myProfile.user_id} />
+
           {/* Premium Upgrade Button */}
           <Card className="relative overflow-hidden border-primary/30 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/20 p-6">
             <View className="absolute right-0 top-0 opacity-10">
@@ -104,3 +107,4 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
+

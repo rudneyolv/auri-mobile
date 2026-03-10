@@ -14,7 +14,7 @@ import {
 } from '@expo-google-fonts/space-grotesk';
 import { Text } from '@/common/components/ui/text';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export { ErrorBoundary } from 'expo-router';
@@ -31,7 +31,8 @@ export default function RootLayout() {
   if (!fontsLoaded) return <Text>Loading</Text>;
 
   return (
-    <SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
       <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
         <QueryClientProvider client={queryClient}>
           <KeyboardProvider>
@@ -54,6 +55,7 @@ export default function RootLayout() {
           </KeyboardProvider>
         </QueryClientProvider>
       </ThemeProvider>
-    </SafeAreaProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
