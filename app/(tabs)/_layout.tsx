@@ -28,7 +28,6 @@ export default function TabsLayout() {
         name="index"
         options={{
           headerShown: false,
-
           tabBarIcon: ({ focused }) => <TabIcon icon={Play} label="Feed" focused={focused} />,
         }}
       />
