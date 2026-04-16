@@ -1,8 +1,11 @@
 import { ApiErrorMessages } from '@/api/components/api-error-messages/api-error-messages';
 import { Text } from '@/common/components/ui/text';
 import { DiscoveryCard } from '@/modules/discovery/components/blocks/discovery-card';
+import { DiscoveryFilter } from '@/modules/discovery/components/feature/discovery-filter';
 import { useDiscovery } from '@/modules/discovery/hooks/api/use-discovery-api';
-import { Stack } from 'expo-router';
+import { deserializeFilters } from '@/modules/discovery/utils/discovery-filters-serializer';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,26 +16,33 @@ const SCREEN_OPTIONS = {
 };
 
 export default function Screen() {
-  const { data, isLoading, error } = useDiscovery();
+  const params = useLocalSearchParams<Record<string, string>>();
+  const filters = useMemo(() => deserializeFilters({ params }), [params]);
+
+  const { data, isLoading, error } = useDiscovery({ filters });
   const profiles = data?.data ?? [];
-
-  if (isLoading) return <Text>Carregando...</Text>;
-
-  if (error) return <ApiErrorMessages messages={error.messages} />;
 
   return (
     <SafeAreaView className="flex-1">
       <Stack.Screen options={SCREEN_OPTIONS} />
 
       <ScrollView contentContainerClassName="gap-4 p-6">
-        <View className="gap-1">
-          <Text variant="h3">Discovery</Text>
-          <Text className="text-sm text-muted-foreground">
-            {data?.meta.total ?? 0} perfis encontrados
-          </Text>
+        <View className="flex-row items-start justify-between gap-4">
+          <View className="gap-1">
+            <Text variant="h3">Discovery</Text>
+            <Text className="text-sm text-muted-foreground">
+              {data?.meta.total ?? 0} perfis encontrados
+            </Text>
+          </View>
+
+          <DiscoveryFilter />
         </View>
 
-        {profiles.length === 0 ? (
+        {error && <ApiErrorMessages messages={error.messages} />}
+
+        {isLoading ? (
+          <Text>Carregando...</Text>
+        ) : profiles.length === 0 ? (
           <DiscoveryCard.Root>
             <DiscoveryCard.Content>
               <Text className="text-sm text-muted-foreground">
