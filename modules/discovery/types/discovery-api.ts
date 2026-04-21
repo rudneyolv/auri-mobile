@@ -1,11 +1,13 @@
 import { DiscoveryItem } from '@/modules/discovery/types/discovery-entity';
 
+export interface DiscoveryCursor {
+  created_at: string;
+  id: string;
+}
+
 export interface DiscoveryResponse {
   data: DiscoveryItem[];
   meta: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
+    nextCursor: DiscoveryCursor | null;
   };
 }
