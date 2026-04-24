@@ -36,7 +36,7 @@ export default function TabsLayout() {
         options={{
           headerShown: false,
 
-          tabBarIcon: ({ focused }) => <TabIcon icon={Heart} label="Likes" focused={focused} />,
+          tabBarIcon: ({ focused }) => <TabIcon icon={Heart} label="Collabs" focused={focused} />,
         }}
       />
       <Tabs.Screen

@@ -1,3 +1,4 @@
+import { DiscoveryCollabStatus } from '@/modules/collab/types/collab-entity';
 import { ProficiencyLevel } from '@/common/types/common-enums';
 
 export interface DiscoveryItem {
@@ -19,5 +20,5 @@ export interface DiscoveryItem {
   }>;
   collab_price_min: number | null;
   collab_price_max: number | null;
-  collab_request_status: null;
+  collab_request_status: DiscoveryCollabStatus;
 }

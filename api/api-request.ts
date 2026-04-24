@@ -54,8 +54,10 @@ export async function apiRequest<T>(data: ApiRequestOptions): Promise<T> {
     };
 
     const response = await fetch(url, config);
-
-    const result = await response.json();
+    const isNoContent = response.status === 204;
+    const contentType = response.headers.get('content-type');
+    const hasJsonBody = !isNoContent && contentType?.includes('application/json');
+    const result = hasJsonBody ? await response.json() : null;
 
     if (!response.ok) {
       handleApiError({ error: result, fallbackMessage: defaultErrorMessage });

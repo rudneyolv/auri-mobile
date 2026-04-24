@@ -3,6 +3,7 @@ import { Button } from '@/common/components/ui/button';
 import { Icon } from '@/common/components/ui/icon';
 import { Spinner } from '@/common/components/ui/spinner';
 import { Text } from '@/common/components/ui/text';
+import { SendCollabRequestCta } from '@/modules/collab/components/feature/send-collab-request-cta';
 import { DiscoveryCard } from '@/modules/discovery/components/blocks/discovery-card';
 import { DiscoveryFilter } from '@/modules/discovery/components/feature/discovery-filter';
 import { useDiscovery } from '@/modules/discovery/hooks/api/use-discovery-api';
@@ -93,6 +94,11 @@ export default function DiscoveryScreen() {
             <DiscoveryCard.Genres.Empty />
           )}
         </DiscoveryCard.Genres.Root>
+
+        <SendCollabRequestCta
+          targetUserId={profile.user_id}
+          initialStatus={profile.collab_request_status}
+        />
       </DiscoveryCard.Content>
     </DiscoveryCard.Root>
   );
