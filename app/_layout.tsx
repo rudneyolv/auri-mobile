@@ -15,6 +15,7 @@ import {
 } from '@expo-google-fonts/space-grotesk';
 import { Text } from '@/common/components/ui/text';
 import { EventsSocketProvider } from '@/modules/event/socket/socket-provider';
+import { MessagesSync } from '@/modules/message/components/messages-sync';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -40,6 +41,7 @@ export default function RootLayout() {
           <KeyboardProvider>
             <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
             <EventsSocketProvider>
+              <MessagesSync />
               <Stack
                 screenOptions={{
                   headerShadowVisible: false,

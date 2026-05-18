@@ -1,13 +1,15 @@
-import { Stack, Tabs } from 'expo-router';
-import { Play, MessageCircle, User, Heart } from 'lucide-react-native';
-import { View, Text } from 'react-native';
+import { useTotalUnreadCount } from '@/modules/message/hooks/use-total-unread-count';
+import { Tabs } from 'expo-router';
+import { Heart, MessageCircle, Play, User } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabsLayout() {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
+  const unreadCount = useTotalUnreadCount();
 
   return (
     <Tabs
@@ -40,12 +42,12 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="chat"
+        name="messages"
         options={{
           headerShown: false,
 
           tabBarIcon: ({ focused }) => (
-            <TabIcon icon={MessageCircle} label="Chat" focused={focused} />
+            <TabIcon icon={MessageCircle} label="Chat" focused={focused} badge={unreadCount} />
           ),
         }}
       />
@@ -75,8 +77,8 @@ function TabIcon({
   const isDark = colorScheme === 'dark';
 
   // Cores do tema
-  const primaryColor = isDark ? '#ffffff' : '#5c5c5c'; // purple-500 / purple-600
-  const mutedColor = isDark ? '#5c5c5c' : '#a1a1aa'; // zinc-500 / zinc-400
+  const primaryColor = isDark ? '#ffffff' : '#5c5c5c';
+  const mutedColor = isDark ? '#5c5c5c' : '#a1a1aa';
 
   return (
     <View className="flex-row items-center justify-center gap-1">
@@ -87,8 +89,10 @@ function TabIcon({
           strokeWidth={focused ? 2.5 : 2}
         />
         {badge && badge > 0 && (
-          <View className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive">
-            <Text className="text-[10px] font-semibold text-destructive-foreground">{badge}</Text>
+          <View className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1">
+            <Text className="text-[10px] font-semibold text-destructive-foreground">
+              {badge > 99 ? '99+' : badge}
+            </Text>
           </View>
         )}
       </View>

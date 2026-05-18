@@ -4,6 +4,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient, processLock } from '@supabase/supabase-js';
 import { ENV } from '@/config/env';
 
+// Silencia o warning inócuo do GoTrue sobre lock acquisition.
+// Esse warning aparece quando múltiplas requests paralelas tentam refrescar
+// o token simultaneamente — o processLock está fazendo a coisa certa
+// (serializando), só polui o console no nosso volume de requests.
+const originalWarn = console.warn;
+console.warn = (...args: unknown[]) => {
+  const first = args[0];
+  if (
+    typeof first === 'string' &&
+    first.includes('@supabase/gotrue-js') &&
+    first.includes('Lock') &&
+    first.includes('acquisition timed out')
+  ) {
+    return;
+  }
+  originalWarn(...args);
+};
+
 const supabaseUrl = ENV.EXPO_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = ENV.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
