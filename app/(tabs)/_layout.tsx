@@ -88,10 +88,10 @@ function TabIcon({
           size={24}
           strokeWidth={focused ? 2.5 : 2}
         />
-        {badge && badge > 0 && (
+        {(badge ?? 0) > 0 && (
           <View className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1">
             <Text className="text-[10px] font-semibold text-destructive-foreground">
-              {badge > 99 ? '99+' : badge}
+              {badge! > 99 ? '99+' : badge}
             </Text>
           </View>
         )}
